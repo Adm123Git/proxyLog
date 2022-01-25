@@ -1,6 +1,6 @@
 package ru.adm123.proxyLog;
 
-import ru.adm123.proxyLog.annotation.Log;
+import ru.adm123.logAgent.annotation.Log;
 
 public class TestLogging {
 

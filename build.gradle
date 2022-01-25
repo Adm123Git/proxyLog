@@ -1,12 +1,70 @@
 plugins {
+    id 'idea'
     id 'java'
+    id "io.spring.dependency-management" version "${pluginVersionSpringDM}"
+    id "io.freefair.lombok" version "${pluginVersionLombok}"
+    id "com.github.johnrengelman.shadow" version "${pluginVersionShadowJar}" apply false
 }
 
-group 'ru.adm123'
-version '1.0-SNAPSHOT'
+idea {
+    project {
+        languageLevel = Common.javaVersion
+    }
+    module {
+        downloadJavadoc = false
+        downloadSources = true
+    }
+}
 
-repositories {
-    mavenCentral()
+allprojects {
+
+    group 'ru.adm123'
+
+    sourceCompatibility = Common.javaVersion
+    targetCompatibility = Common.javaVersion
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'io.freefair.lombok'
+
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom "org.springframework.boot:spring-boot-dependencies:${Common.springBoot}"
+            }
+        }
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+    }
+
+    configurations.all {
+
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+
+        resolutionStrategy {
+            force("javax.servlet:servlet-api:2.4")
+            force("commons-logging:commons-logging:1.1.1")
+            force("commons-lang:commons-lang:2.5")
+            force("org.codehaus.jackson:jackson-core-asl:1.8.8")
+            force("org.codehaus.jackson:jackson-mapper-asl:1.8.3")
+            force("org.codehaus.jettison:jettison:1.1")
+            force("net.java.dev.jna:jna:5.8.0")
+        }
+
+    }
+
 }
 
 dependencies {

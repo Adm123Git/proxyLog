@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+version "${appVersion}"
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+    publications {
+        shadow(MavenPublication) {
+            publication ->
+                artifact shadowJar
+                artifactId = "${appArchiveBaseName}"
+        }
+    }
+}
+
+shadowJar {
+    archiveBaseName.set("${appArchiveBaseName}")
+    archiveClassifier.set("${appArchiveClassifier}")
+    manifest {
+        attributes 'Premain-Class': "${appMainClassName}"
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar

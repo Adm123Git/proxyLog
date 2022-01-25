@@ -1,2 +1,3 @@
 rootProject.name = 'ProxyLog'
-
+include 'agent'
+include 'application'
