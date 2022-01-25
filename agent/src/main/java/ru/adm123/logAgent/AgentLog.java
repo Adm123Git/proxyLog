@@ -1,7 +1,5 @@
 package ru.adm123.logAgent;
 
-import ru.adm123.logAgent.annotation.TransformerMethodLog;
-
 import java.lang.instrument.Instrumentation;
 
 /**
@@ -11,7 +9,8 @@ public class AgentLog {
 
     public static void premain(String agentArgument,
                                Instrumentation instrumentation) {
-        instrumentation.addTransformer(new TransformerMethodLog());
+        instrumentation.addTransformer(new TransformerAnnotation());
     }
+
 
 }
