@@ -19,9 +19,6 @@ public class TransformerMethodLog implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) {
-
-        System.out.println("========= agent working ===========");
-
         try {
             List<Method> loggedMethods = ClassReflection.getLogAnnotatedMethods(loader.loadClass(className), Log.class);
 

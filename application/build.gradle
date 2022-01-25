@@ -6,6 +6,6 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'ru.adm123.proxyLog.Application'
+        attributes 'Main-Class': "${appMainClassName}"
     }
 }

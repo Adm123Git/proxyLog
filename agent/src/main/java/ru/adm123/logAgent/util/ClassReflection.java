@@ -15,7 +15,12 @@ public class ClassReflection {
     }
 
     public static List<Method> getLogAnnotatedMethods(Class<?> clazz,
-                                                        Class<? extends Annotation> annotationClass) {
+                                                      Class<? extends Annotation> annotationClass) {
+
+        System.out.println(clazz);
+        System.out.println(Arrays.toString(clazz.getDeclaredMethods()));
+        System.out.println("-----------------");
+
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(annotationClass))
                 .collect(Collectors.toList());

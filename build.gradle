@@ -8,7 +8,7 @@ plugins {
 
 idea {
     project {
-        languageLevel = Common.javaVersion
+        languageLevel = JavaVersion.VERSION_17
     }
     module {
         downloadJavadoc = false
@@ -20,8 +20,8 @@ allprojects {
 
     group 'ru.adm123'
 
-    sourceCompatibility = Common.javaVersion
-    targetCompatibility = Common.javaVersion
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     repositories {
         mavenLocal()
@@ -35,7 +35,7 @@ allprojects {
     dependencyManagement {
         dependencies {
             imports {
-                mavenBom "org.springframework.boot:spring-boot-dependencies:${Common.springBoot}"
+                mavenBom "org.springframework.boot:spring-boot-dependencies:${versionSpringBoot}"
             }
         }
     }
@@ -65,7 +65,4 @@ allprojects {
 
     }
 
-}
-
-dependencies {
 }
