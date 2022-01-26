@@ -15,14 +15,11 @@ public class LogExecuteTimeHandler implements AnnotationHandler<LogExecuteTime> 
     @Override
     public void handle(CtMethod method) {
         try {
-
             var annotation = ((LogExecuteTime) method.getAnnotation(LogExecuteTime.class));
             var unit = annotation.unit();
             var logTemplate = annotation.template()
                     .replace("$methodName", method.getName())
                     .replace("$executeTime", "\" + (_tFinish.longValue() - _tStart.longValue()) + \"");
-
-
             var ctClassLong = ClassPool.getDefault().get(Long.class.getName());
             method.addLocalVariable("_tStart", ctClassLong);
             method.addLocalVariable("_tFinish", ctClassLong);
