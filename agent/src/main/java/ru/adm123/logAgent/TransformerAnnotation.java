@@ -50,7 +50,7 @@ public class TransformerAnnotation implements ClassFileTransformer {
 
     private void addMethodAnnotationHandler(CtClass applicationClass,
                                             AnnotationHandler<?> annotationHandler) {
-        getLogAnnotatedMethods(applicationClass, annotationHandler.getAnnotation()).stream()
+        getLogAnnotatedMethods(applicationClass, annotationHandler.getAnnotationClass()).stream()
                 .filter(ctMethod -> !ctMethod.getMethodInfo().isConstructor())
                 .forEach(annotationHandler::handle);
     }
