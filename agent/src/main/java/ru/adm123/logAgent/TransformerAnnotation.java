@@ -2,13 +2,11 @@ package ru.adm123.logAgent;
 
 import javassist.*;
 import ru.adm123.logAgent.annotation.AnnotationHandler;
-import ru.adm123.logAgent.annotation.Log;
-import ru.adm123.logAgent.annotation.LogAnnotationHandler;
-import ru.adm123.logAgent.util.Console;
+import ru.adm123.logAgent.annotation.LogExecuteTime;
+import ru.adm123.logAgent.annotation.LogExecuteTimeHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
 
@@ -20,7 +18,7 @@ import static ru.adm123.logAgent.util.ClassReflection.isJavaClass;
  */
 public class TransformerAnnotation implements ClassFileTransformer {
 
-    private final AnnotationHandler logAnnotationHandler = new LogAnnotationHandler();
+    private final AnnotationHandler<LogExecuteTime> logExecuteTimeHandler = new LogExecuteTimeHandler();
 
     @Override
     public byte[] transform(ClassLoader loader,
@@ -32,9 +30,11 @@ public class TransformerAnnotation implements ClassFileTransformer {
             return classfileBuffer;
         }
         try {
-            addMethodAnnotationHandler(getCtClass(loader, classfileBuffer), logAnnotationHandler);
-        } catch (Exception ignored) {
-            Console.printLn("error on transform class " + className);
+            CtClass transformClass = getCtClass(loader, classfileBuffer);
+            addMethodAnnotationHandler(transformClass, logExecuteTimeHandler);
+            return transformClass.toBytecode();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return classfileBuffer;
     }
@@ -44,13 +44,15 @@ public class TransformerAnnotation implements ClassFileTransformer {
         ClassPool classPool = new ClassPool();
         classPool.appendClassPath(new LoaderClassPath(loader));
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(classfileBuffer)) {
-            return classPool.makeClass(byteArrayInputStream);
+            return classPool.makeClassIfNew(byteArrayInputStream);
         }
     }
 
     private void addMethodAnnotationHandler(CtClass applicationClass,
-                                            AnnotationHandler annotationHandler) {
-        getLogAnnotatedMethods(applicationClass, annotationHandler.getAnnotation()).forEach(annotationHandler::handle);
+                                            AnnotationHandler<?> annotationHandler) {
+        getLogAnnotatedMethods(applicationClass, annotationHandler.getAnnotation()).stream()
+                .filter(ctMethod -> !ctMethod.getMethodInfo().isConstructor())
+                .forEach(annotationHandler::handle);
     }
 
 }

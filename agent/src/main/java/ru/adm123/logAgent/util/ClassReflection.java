@@ -23,21 +23,12 @@ public class ClassReflection {
     public static List<CtMethod> getLogAnnotatedMethods(CtClass ctClass,
                                                         Class<? extends Annotation> annotationClass) {
         return Arrays.stream(ctClass.getDeclaredMethods())
-                .filter(method -> isMethodAnnotated(method, annotationClass))
+                .filter(method -> method.hasAnnotation(annotationClass))
                 .collect(Collectors.toList());
     }
 
     public static boolean isJavaClass(String className) {
         return className != null && JAVA_PACKAGES.stream().anyMatch(className::startsWith);
-    }
-
-    private static boolean isMethodAnnotated(CtMethod method,
-                                             Class<? extends Annotation> annotationClass) {
-        try {
-            return method.getAnnotation(annotationClass) != null;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("method reflection error");
-        }
     }
 
 }

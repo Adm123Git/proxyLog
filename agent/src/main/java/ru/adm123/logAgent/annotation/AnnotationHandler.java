@@ -7,7 +7,7 @@ import java.lang.annotation.Annotation;
 /**
  * @author Dmitry Ushakov at 25.01.2022
  */
-public interface AnnotationHandler {
-    Class<? extends Annotation> getAnnotation();
+public interface AnnotationHandler<T extends Annotation> {
+    Class<T> getAnnotation();
     void handle(CtMethod method);
 }
