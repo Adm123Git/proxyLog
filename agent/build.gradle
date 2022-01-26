@@ -23,6 +23,7 @@ publishing {
 shadowJar {
     archiveBaseName.set("${appArchiveBaseName}")
     archiveClassifier.set("${appArchiveClassifier}")
+    archiveFileName = "${appArchiveBaseName}.jar"
     manifest {
         attributes 'Premain-Class': "${appMainClassName}"
         attributes 'Can-Redefine-Classes': true
